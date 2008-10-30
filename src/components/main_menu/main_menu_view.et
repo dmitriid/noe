@@ -1,0 +1,14 @@
+<%@ index(main_menu) %>
+
+<ul>
+	<li><a href="/show/all" class="show" id="show_all">Show all</a></li>
+	<li><a href="/show/none" class="show" id="hide_all">Hide all</a></li>
+	<li><a href="/note/add" id="add_note" class="addnote">Add note</a></li>
+</ul>
+
+<%@ index(secondary_menu) %>
+
+<ul>
+	<li><a href="/" class="show">Show notes</a></li>
+</ul>
+

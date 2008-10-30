@@ -1,0 +1,19 @@
+<%@ index(Notes) %>
+<% [note(Note) || Note <- Notes] %>
+
+<%! API/Private function %>
+<%! Note the note:field_to_iolist/1 call!!! Otherwise it will output a character with ASCII code of note:id(ID) %>
+<%@ note(Note) %>
+<div class="note" id="<% note:field_to_iolist(note:id(Note)) %>">
+	<h2>
+		<% note:title(Note) %>
+		&nbsp;&nbsp;
+		<small><a href="/note/edit/<% note:field_to_iolist(note:id(Note)) %>" class="edit">Edit</a>
+		&nbsp;&nbsp;
+		<a href="/note/delete/<% note:field_to_iolist(note:id(Note)) %>" class="delete">Delete</a></small>
+	</h2>
+	<div>
+		<% string_utils:nl2br(note:text(Note)) %>
+		<%! note:text(Note) %>
+	</div>
+</div>

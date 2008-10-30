@@ -1,0 +1,111 @@
+/*
+	I have to admit it, but the style has been adopted from
+	http://www.cabedge.com/
+*/
+
+
+body {
+	margin: 0; padding: 0;
+	font-size: 62.5%; /* enables you to easily size text with ems */
+	font-family: Georgia, georgia, "Times New Roman", Times, serif;
+	background: url(../images/bg_body.gif) repeat-x #f3ecc4;
+	color: #646451; /* default font color */
+	position: relative;
+	width: 100%;
+}
+
+#navigation{
+	font-size: 2.7em;
+	text-align: right;
+	width: 500px;
+	position: absolute;
+	left: 365px;
+	top: 90px;
+}
+
+a:link {color: #d27005; text-decoration: none;}
+a:visited {color: #d27005; text-decoration: none;}
+a:hover {color: #d28a34; text-decoration: underline;}
+a:active {color: #d27005; text-decoration: none;}
+
+#content{
+	width: 730px;
+	border-bottom: 1px solid #d5d3c0;
+	margin: 150px 0 0 35px;
+	padding: 0px 0 15px 0;
+	padding-bottom: 50px
+}
+
+
+/* NAVIGATION */
+#navigation li{
+  display: inline;
+  float: right;
+}
+#navigation a{
+  display: block;
+  color: #575447;
+  text-decoration: none;
+}
+#navigation .current a, #navigation .current a:link,
+#navigation .current a:visited, #navigation .current a:active{
+  padding-bottom:4px;
+  border-bottom: 4px solid #d27005;
+}
+#navigation a:hover{
+  padding-bottom:4px;
+  text-decoration: none;
+  border-bottom: 4px solid #d27005
+}
+#navigation li{
+  margin-left: 12px;
+}
+
+
+.addnote{
+	color: #d27005 !important;
+}
+
+#content div.note div, div.note div{
+  font-size: 1.5em;
+  margin: 1em 0 .5em 0;
+  line-height: 1.5em;
+  padding: 0 10px 0 0;
+}
+
+#content h2, div.note h2{
+	font-size: 27px;
+	text-transform: lowercase;
+	font-weight: normal;
+	color: #d27005;
+	margin: 0 0 25px 0;
+	cursor: pointer;
+	cursor: hand;	
+}
+
+h2 small {font-size: 10pt;}
+
+fieldset {
+ padding: 0px;
+}
+
+fieldset legend {
+
+ font-weight: bold;
+}
+
+div.frm {
+ clear: both;
+ padding: 4px;
+}
+
+div.frm label {
+ width: 150px;
+ float: left;
+}
+
+
+textarea {
+ width: 27em;
+ height: 10em;
+}

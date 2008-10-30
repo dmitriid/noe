@@ -1,0 +1,144 @@
+<%@ add(html) %>
+<% add_note_form() %>
+
+<%@ add({xhr, Note}) %>
+<%? Text = note:text(Note), {ok, Txt} = utf8:from_binary(Text) %>
+<taconite>
+	<prepend select="#content"><![CDATA[
+		<div class="note" id="<% note:field_to_iolist(note:id(Note)) %>">
+			<h2>
+				<% note:title(Note) %>
+				&nbsp;&nbsp;
+				<small><a href="/note/edit/<% note:field_to_iolist(note:id(Note)) %>" class="edit">Edit</a>
+				&nbsp;&nbsp;
+				<a href="/note/delete/<% note:field_to_iolist(note:id(Note)) %>" class="delete">Delete</a></small>
+			</h2>
+			<div>
+				<% string_utils:nl2br(Txt) %>
+			</div>
+		</div>
+	]]>
+	</prepend>
+	<eval>jsfy_notes(); jsfy_links();modal_box.hideAndUnload();</eval>
+</taconite>
+
+<%@ add({html, empty}) %>
+Both title and text cannot be empty
+<% add_note_form() %>
+
+<%@ add({xhr, error, empty}) %>
+
+<taconite>
+	<eval><![CDATA[
+		modal_box.getContent().prepend('<div class="error" style="display: none">Both title and text cannot be empty</div>');
+		modal_box.getContent().find('div.error').show('fast');
+	]]></eval>
+</taconite>
+
+<%@ add_note_form() %>
+
+<form action="/note/add" method="post">			
+	<div class="frm">
+		<label for="title">Title</label>
+		<input type="text" name="title" id="title" />
+	</div>
+	<div class="frm">
+		<label for="text">Text</label>
+		<textarea name="text" id="text"></textarea>
+	</div>
+	<div class="frm">
+		<input type="submit" value="Save" />
+		<a href="/">Cancel</a>
+	</div>
+</form>
+
+
+
+
+<%@ edit({html, Note}) %>
+<% edit_note_form(Note) %>
+
+<%@ edit({xhr, Note}) %>
+<% edit_note_form(Note) %>
+
+<%@ edit({xhr, Note, posted}) %>
+<taconite>
+	<replace select="#content #<% note:field_to_iolist(note:id(Note)) %>"><![CDATA[
+		<div class="note" id="<% note:field_to_iolist(note:id(Note)) %>">
+			<h2>
+				<% note:title(Note) %>
+				&nbsp;&nbsp;
+				<small><a href="/note/edit/<% note:field_to_iolist(note:id(Note)) %>" class="edit">Edit</a>
+				&nbsp;&nbsp;
+				<a href="/note/delete/<% note:field_to_iolist(note:id(Note)) %>" class="delete">Delete</a></small>
+			</h2>
+			<div>
+				<% string_utils:nl2br(note:text(Note)) %>
+			</div>
+		</div>
+	]]>
+	</replace>
+	<eval>jsfy_notes();jsfy_links();modal_box.hideAndUnload();</eval>
+</taconite>
+
+<%@ edit({html, Note, empty}) %>
+Both title and text cannot be empty
+<% edit_note_form(Note) %>
+
+<%@ edit({xhr, Note, empty}) %>
+
+<taconite>
+	<eval><![CDATA[
+		modal_box.getContent().prepend('<div class="error" style="display: none">Both title and text cannot be empty</div>');
+		modal_box.getContent().find('div.error').show('fast');
+	]]></eval>
+</taconite>
+
+<%@ edit_note_form(Note) %>
+
+<form action="/note/edit/<% note:field_to_iolist(note:id(Note)) %>" method="post">			
+	<div class="frm">
+		<label for="title">Title</label>
+		<input type="text" name="title" id="title" value="<% string_utils:htmlize_lite(note:title(Note)) %>" />
+	</div>
+	<div class="frm">
+		<label for="text">Text</label>
+		<textarea name="text" id="text"><% string_utils:htmlize_lite(note:text(Note)) %></textarea>
+	</div>
+	<div class="frm">
+		<input type="submit" value="Save" />
+		<a href="/">Cancel</a>
+	</div>
+</form>
+
+
+<%@ delete({xhr, Note}) %>
+<% display_note(Note, 128) %>
+<% deletion_form(Note) %>
+	
+<%@ delete({xhr, Note, deleted}) %>
+<taconite>
+	<hide select="#<% note:field_to_iolist(note:id(Note)) %>" />
+	<remove select="#<% note:field_to_iolist(note:id(Note)) %>" />
+	<eval>
+		modal_box.hideAndUnload();
+	</eval>
+</taconite>
+	
+<%@ delete({html, Note}) %>
+<strong>Delete this note?</strong><br />
+<% display_note(Note, 0) %>
+<% deletion_form(Note) %>
+
+<%@ deletion_form(Note) %>
+<form action="/note/delete/<% note:field_to_iolist(note:id(Note)) %>" method="post">
+	<input type="submit" value="Delete" /><a href="/">Cancel</a>
+</form>
+		
+<%@ display_note(Note, Cutoff) %>
+<div class="note">
+	<h2><% note:title(Note) %></h2>
+	<div>
+		<% case Cutoff of 0 -> string_utils:nl2br(note:text(Note)); _ -> string_utils:ellipses(string_utils:nl2br(note:text(Note)), Cutoff) end %>
+	</div>
+</div>
