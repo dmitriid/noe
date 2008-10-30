@@ -23,6 +23,13 @@ body {
 	top: 90px;
 }
 
+#secondary_nav{
+	position: absolute;
+	left: 800px;
+	top: 190px;
+}
+
+
 a:link {color: #d27005; text-decoration: none;}
 a:visited {color: #d27005; text-decoration: none;}
 a:hover {color: #d28a34; text-decoration: underline;}
@@ -31,7 +38,7 @@ a:active {color: #d27005; text-decoration: none;}
 #content{
 	width: 730px;
 	border-bottom: 1px solid #d5d3c0;
-	margin: 150px 0 0 35px;
+	margin: 90px 0 0 35px;
 	padding: 0px 0 15px 0;
 	padding-bottom: 50px
 }
@@ -61,9 +68,17 @@ a:active {color: #d27005; text-decoration: none;}
   margin-left: 12px;
 }
 
+#secondary_nav li{
+  margin-bottom: 10px;
+}
+
 
 .addnote{
 	color: #d27005 !important;
+}
+
+#content div.note{
+	margin-bottom: 40px;
 }
 
 #content div.note div, div.note div{
@@ -109,3 +124,4 @@ textarea {
  width: 27em;
  height: 10em;
 }
+
