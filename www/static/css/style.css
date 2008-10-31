@@ -29,6 +29,13 @@ body {
 	top: 190px;
 }
 
+#footer {
+	font-size: 8pt;
+	width: 100%;
+	margin-top: 50px;
+	text-align: center;
+}
+
 
 a:link {color: #d27005; text-decoration: none;}
 a:visited {color: #d27005; text-decoration: none;}
@@ -37,7 +44,6 @@ a:active {color: #d27005; text-decoration: none;}
 
 #content{
 	width: 730px;
-	border-bottom: 1px solid #d5d3c0;
 	margin: 90px 0 0 35px;
 	padding: 0px 0 15px 0;
 	padding-bottom: 50px

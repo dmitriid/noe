@@ -30,6 +30,12 @@
 				<% MainMenu %>
 			</div>
 		</div>
+		<div id="footer">
+			&copy; 2008 and on Dmitrii Dimandt.
+			<br /><br />
+			Project site: <a href="http://noe.dmitriid.com/">http://noe.dmitriid.com/</a>.
+			Released under <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache 2.0 License</a>
+		</div>
 		
 		<div style="display: none" id="note_form">
 			<form action="/note/add" method="post">			
