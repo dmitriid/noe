@@ -1,0 +1,47 @@
+noe — это простое приложение для ведения записей, реализованое при помощи Erlyweb
+
+УСТАНОВКА
+
+1. Установите yaws, http://yaws.hyber.org
+2. Установите MySQL, http://mysql.org
+3. Установите ErlyWeb, http://erlyweb.org
+
+4. Создайте сайт в yaws.conf:
+
+	<server noe>
+	        port = 80
+	        listen = 0.0.0.0
+	        docroot = /путь/к/noe/www/
+	        appmods = </, erlyweb>
+
+	        <opaque>
+	                appname = noe
+	        </opaque>
+	</server>
+
+5. Добавьте в /etc/hosts (на Windows - /path/to/windows/system32/drivers/etc/hosts) следующую строчку:
+	
+	127.0.0.1	noe
+
+5. 	Запустите migrations/main.sql, чтобы создать необходимые таблицы
+6.	Откройте src/noe_app.hrl и внесите необходимые изменения для базы и путей
+7.	Скомпилируйте src/noe.erl. Из консоли это можно сделать следующим образом:
+  
+	sh> cd /путь/к/noe
+	../noe> erl
+	1> c(noe).
+	{ok, noe}
+	2> halt().
+
+8. Поместите сгенерированый noe.beam В директорию, которая будет видна yaws. Для этого можно добавить директиву ebin_dir в yaws.conf:
+	
+	ebin_dir = /путь/к/файлам/beam
+	
+9. В консоли запустите yaws и noe
+	
+	sh> yaws -i
+	... много информации ...
+	1> noe:start().
+	... noe компилируется ...
+	
+10. Теперь в браузере можно перейти на адрес http://noe/
