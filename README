@@ -6,42 +6,22 @@ INSTALLATIION
 2. Install MySQL, http://mysql.org
 3. Install ErlyWeb, http://erlyweb.org
 
-4. Create a site in your yaws.conf file:
-
-	<server noe>
-	        port = 80
-	        listen = 0.0.0.0
-	        docroot = /path/to/noe/www/
-	        appmods = </, erlyweb>
-
-	        <opaque>
-	                appname = noe
-	        </opaque>
-	</server>
-
-5. Edit /etc/hosts (on Windows - /path/to/windows/system32/drivers/etc/hosts) and add:
+4. Edit /etc/hosts (on Windows - /path/to/windows/system32/drivers/etc/hosts) and add:
 	
 	127.0.0.1	noe
 
 5. Run migrations/main.sql to create necessary tables in you database
 6. Edit src/noe_app.hrl and change database connection data and paths
-7. Open console, compile src/noe.erl. It may be done like so:
+7. Open console, and type:
   
-	sh> cd /path/to/noe
-	../noe> erl
-	1> c(noe).
-	{ok, noe}
-	2> halt().
+	sh> make run
 
-8. Place the generated noe.beam file somwhere where yaws can see it. You can add a ebin_dir to yaws.conf:
-	
-	ebin_dir = /path/to/my/beam/files
-	
-9. Open console, run yaws, run noe
-	
-	sh> yaws -i
-	... lots of info ...
-	1> noe:start().
-	... noe is compiling ...
-	
-10. You can now open up your browser and navigate to http://noe/
+This will:
+	- run make:all()
+		- which will use the Emakefile information to compile the files
+		  needed for compiling/starting noe (noe.erl for now)
+	- start a Yaws server using the configuration data from ./yaws.conf
+	- execute noe:start() as specified in the yaws.conf with the line:
+		runmod = noe
+
+8. You can now open up your browser and navigate to http://noe/
