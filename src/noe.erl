@@ -4,9 +4,33 @@
 -include("noe_app.hrl").
 
 start() ->
-    application:start(inets),
-    init_mysql(),
-    compile().
+    process_flag(trap_exit, true),
+    Inets = (catch application:start(inets)),
+    start_phase(mysql, normal, [{?DB_HOSTNAME, ?DB_USERNAME, ?DB_PASSWORD, ?DB_DATABASE, ?DB_POOL_SIZE}]),
+    start_phase(compile, normal, []),
+    [{inets, Inets}].
+
+start_phase(mysql, _Type, DBConfigs) ->
+    [mysql_connect(Hostname, User, Password, Database, PoolSize)
+     || {Hostname, User, Password, Database, PoolSize} <- DBConfigs],
+    ok;
+
+start_phase(compile, _Type, _Args) ->
+    compile(),
+    ok.
+
+mysql_connect(Hostname, User, Password, Database, PoolSize) ->
+    erlydb:start(
+      mysql, [{hostname, Hostname},
+	      {username, User},
+	      {password, Password},
+	      {database, Database},
+	      {logfun, fun log/4}]),
+    lists:foreach(
+      fun(_PoolNumber) ->
+	      mysql:connect(erlydb_mysql, Hostname, undefined, User, Password,
+			    Database, true)
+      end, lists:seq(1, PoolSize)).
 
 compile() ->
     compile([]).
@@ -18,17 +42,40 @@ compile_update() ->
     compile([{last_compile_time, auto}]).
 
 compile(Opts) ->
-    erlyweb:compile(?APP_PATH,
+    erlyweb:compile(compile_dir(default),
 		    [{erlydb_driver, mysql}, {erlydb_timeout, 20000} | Opts]).
 
-init_mysql() ->
-    erlydb:start(mysql,
-		 [{hostname, ?DB_HOSTNAME},
-		  {username, ?DB_USERNAME}, {password, ?DB_PASSWORD},
-		  {database, ?DB_DATABASE}]),
-    lists:foreach(
-      fun(_) ->
-	      mysql:connect(erlydb_mysql, ?DB_HOSTNAME, undefined,
-			    ?DB_USERNAME, ?DB_PASSWORD, ?DB_DATABASE, true)
-      end, lists:seq(1, ?DB_POOL_SIZE)).
+compile_dir(auto) ->
+    {ok, CWD} = file:get_cwd(), CWD;
+compile_dir(default) ->
+    ?APP_PATH;
+compile_dir(appconfig) ->
+    {ok, CDir} = application:get_env(noe, compile_dir),
+    CDir;
+compile_dir(Dir) ->
+    Dir.
 
+
+%% This function is needed for logging in the mysql start_phase so I copied it here.
+%% In the twoorl project it was located in twoorl_util.erl.
+log(Module, Line, Level, FormatFun) ->
+    Func = case Level of
+	       debug ->
+		   % info_msg;
+		   undefined;
+	       info ->
+		   info_msg;
+	       normal ->
+		   info_msg;
+	       error ->
+		   error_msg;
+	       warn ->
+		   warning_msg
+	   end,
+    if Func == undefined ->
+	    ok;
+	true ->
+	    {Format, Params} = FormatFun(),
+	    error_logger:Func("~w:~b: "++ Format ++ "~n",
+			      [Module, Line | Params])
+    end.
